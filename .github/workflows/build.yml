@@ -13,7 +13,7 @@ on:
 
 jobs:
   build_ubuntu:
-    name: ubuntu-latest} build
+    name: ubuntu-latest build
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -41,7 +41,7 @@ jobs:
 
       - name: Configure conan
         run: |
-          apt-get update && apt-get install -y libudev-dev
+          sudo apt-get update && apt-get install -y libudev-dev
           conan profile new --detect default
           conan profile update settings.compiler.libcxx=libstdc++11 default
 
