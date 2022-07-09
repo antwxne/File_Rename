@@ -12,67 +12,82 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        include:
-          - os: windows-latest
-            bin: unit_tests.exe
-          - os: ubuntu-latest
-            bin: unit_tests
-          - os: macos-latest
-            bin: unit_tests
-    name: ${{ matrix.os }} build
-    runs-on: ${{ matrix.os }}
+  build_ubuntu:
+    name: ubuntu-latest} build
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v2
 
+      - name: Create build folder
+        run: mkdir -p build
+
+      - name: Cache build folder
+        id: cache-build
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-build-folder
+        with:
+          path: |
+            ./build
+            /home/runner/.conan
+          key: ${{ runner.os }}-build-${{ env.cache-name }}_${{ hashFiles('./Sources/*') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}_${{ hashFiles('./Sources/*') }}
+
       - name: Install conan
         run: |
-          pip3 install conan
           pip3 install conan --upgrade
 
-      - name: Configure conan (Ubuntu only)
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+      - name: Configure conan
         run: |
+          apt-get update && apt-get install -y libudev-dev
           conan profile new --detect default
           conan profile update settings.compiler.libcxx=libstdc++11 default
 
       - name: Install conan libs
         run: |
-          mkdir -p build && cd build && conan install .. --build=missing
-        working-directory: ./
+          conan install --build=missing ..
+        working-directory: ./build
 
       - name: Build project
-        if: ${{ matrix.os != 'windows-latest' }}
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release -G "Unix Makefiles" .. && cmake --build .
         working-directory: ./build
 
-      - name: Build project (Windows)
-        if: ${{ matrix.os == 'windows-latest' }}
+  build_windows:
+    name: windows-latest build
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Create build folder
+        run: mkdir -p build
+
+      - name: Cache build folder
+        id: cache-build
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-build-folder
+        with:
+          path: |
+            build
+            \home\runner\.conan
+          key: ${{ runner.os }}-build-${{ env.cache-name }}_${{ hashFiles('./Sources/*') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}_${{ hashFiles('./Sources/*') }}
+
+      - name: Install conan
+        run: |
+          pip3 install conan --upgrade
+
+      - name: Install conan libs
+        run: |
+          conan install --build=missing ..
+        working-directory: ./build
+
+      - name: Build project
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
         working-directory: ./build
-#  tests:
-#    name: Run tests
-#    runs-on: ubuntu-latest
-#    timeout-minutes: 15
-#    needs: build
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Install conan
-#        run: |
-#          pip3 install conan
-#          pip3 install conan --upgrade
-#
-#      - name: Configure conan
-#        run: |
-#          conan profile new --detect default
-#          conan profile update settings.compiler.libcxx=libstdc++11 default
-#
-#      - name: Run tests
-#        run: |
-#          make tests_run
