@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 sudo apt-get update && sudo apt-get install -y \
+libudev-dev \
 libx11-dev \
 libx11-xcb-dev \
 libfontenc-dev \
