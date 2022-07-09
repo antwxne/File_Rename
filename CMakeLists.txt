@@ -20,6 +20,7 @@ if (CMAKE_BUILD_TYPE EQUAL "DEBUG")
     add_compile_definitions(DEBUG)
 endif ()
 
+add_compile_definitions(REPO_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
 
 # conan settings
 include(${CMAKE_SOURCE_DIR}/build/conanbuildinfo.cmake)
@@ -33,7 +34,7 @@ include_directories(Sources)
 include(Sources/Sources.cmake)
 set(MAIN
         Sources/Main.cpp)
-set(SRC ${SRC} )
+set(SRC ${SRC} Sources/Button.cpp Sources/Button.hpp Sources/InputBox.cpp Sources/InputBox.hpp Sources/RenameClass.cpp Sources/RenameClass.hpp)
 
 # Build
 add_executable(${NAME} ${MAIN} ${SRC})
