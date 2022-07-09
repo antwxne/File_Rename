@@ -1,0 +1,78 @@
+name: Build Check
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: windows-latest
+            bin: unit_tests.exe
+          - os: ubuntu-latest
+            bin: unit_tests
+          - os: macos-latest
+            bin: unit_tests
+    name: ${{ matrix.os }} build
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install conan
+        run: |
+          pip3 install conan
+          pip3 install conan --upgrade
+
+      - name: Configure conan (Ubuntu only)
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          conan profile new --detect default
+          conan profile update settings.compiler.libcxx=libstdc++11 default
+
+      - name: Install conan libs
+        run: |
+          mkdir -p build && cd build && conan install .. --build=missing
+        working-directory: ./
+
+      - name: Build project
+        if: ${{ matrix.os != 'windows-latest' }}
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=Release -G "Unix Makefiles" .. && cmake --build .
+        working-directory: ./build
+
+      - name: Build project (Windows)
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
+        working-directory: ./build
+  tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: build
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install conan
+        run: |
+          pip3 install conan
+          pip3 install conan --upgrade
+
+      - name: Configure conan
+        run: |
+          conan profile new --detect default
+          conan profile update settings.compiler.libcxx=libstdc++11 default
+
+      - name: Run tests
+        run: |
+          make tests_run

@@ -1,0 +1,13 @@
+[requires]
+
+[generators]
+cmake
+
+[options]
+*:shared=True
+
+[imports]
+lib, *.so* -> lib
+lib, *.dll -> lib
+lib, *.dylib -> lib
+include, *.h* -> include
