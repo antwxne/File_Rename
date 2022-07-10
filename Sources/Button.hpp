@@ -15,12 +15,17 @@
 
 namespace UI {
 
-const std::string FONT_PATH = std::string(REPO_SOURCE_DIR) + "/Resources/BebasNeue-Regular.ttf";;
+//const std::string FONT_PATH = std::string(REPO_SOURCE_DIR) + "/build/bin/BebasNeue-Regular.ttf";;
+#if _WIN32
+    const std::string FONT_PATH = "BebasNeue-Regular.ttf";
+#else
+    const std::string FONT_PATH = std::string(REPO_SOURCE_DIR) + "/Resources/BebasNeue-Regular.ttf";
 
+#endif
 
 class Button {
 public:
-    Button(const std::string &content, const sf::Color &color,
+    Button(const std::wstring &content, const sf::Color &color,
         const sf::Vector2f &size, const sf::Vector2f &pos
     );
 

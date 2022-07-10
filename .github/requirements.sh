@@ -45,4 +45,5 @@ libxcb-xinerama0-dev \
 xkb-data \
 libxcb-dri3-dev \
 uuid-dev \
-libxcb-util-dev
+libxcb-util-dev \
+libgl-dev

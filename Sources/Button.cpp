@@ -2,15 +2,16 @@
 // Created by antoine on 7/9/22.
 //
 
+#include <iostream>
+
 #include "Button.hpp"
 
-UI::Button::Button(const std::string &content, const sf::Color &color,
+UI::Button::Button(const std::wstring &content, const sf::Color &color,
     const sf::Vector2f &size, const sf::Vector2f &pos
 ) : _rect(std::make_unique<sf::RectangleShape>(size)),
     _font(std::make_unique<sf::Font>()),
     _contentText(std::make_unique<sf::Text>())
 {
-
     _rect->setFillColor(color);
     _rect->setPosition(pos);
     _font->loadFromFile(UI::FONT_PATH);

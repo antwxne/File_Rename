@@ -16,11 +16,13 @@
 
 int main()
 {
+    std::cout << UI::FONT_PATH << std::endl;
+
     sf::RenderWindow window(sf::VideoMode(800, 300),
         "Changer les noms des fichiers");
-    UI::Button validateButton("Valider", sf::Color::Green, {100, 50},
+    UI::Button validateButton(L"Valider", sf::Color::Green, {100, 50},
         {450, 200});
-    UI::Button cancelButton("Annuler", sf::Color::Red, {100, 50}, {250, 200});
+    UI::Button cancelButton(L"Annuler", sf::Color::Red, {100, 50}, {250, 200});
     UI::InputBox inputBox("Chemin jusqu'au dossier:", {220, 220, 220, 255},
         {500, 50}, {150, 100});
     sf::Text statusText;

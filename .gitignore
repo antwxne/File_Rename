@@ -1,4 +1,7 @@
+out
+.vs
 *.pdb
+CMakeSettings.json
 cmake-build-debug
 cmake-build-release
 build

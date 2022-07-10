@@ -19,8 +19,8 @@ void RenameClass::renameFilesByDate(const std::string &folderPath)
     std::string fileDate;
     std::unordered_map<std::string, std::size_t> dateMap;
     for (const auto &entry: std::filesystem::directory_iterator(folderPath)) {
-        filePath = entry.path();
-        mimeType = getMimeType(filePath);
+        filePath = entry.path().string();
+        mimeType = entry.path().extension().string();
         fileDate = getFileDate(filePath);
         newPath =
             folderPath + "/" + fileDate + "_" + std::to_string(dateMap[fileDate]) +
@@ -39,7 +39,7 @@ std::string RenameClass::getMimeType(const std::string &path)
 std::string RenameClass::getFileDate(const std::string &filePath)
 {
     #if _WIN32
-    return ""
+    return "";
     #else
     struct stat t_stat;
     char buffer[11];
