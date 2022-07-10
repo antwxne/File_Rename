@@ -5,9 +5,15 @@
 #include <filesystem>
 #include <iostream>
 #include <unordered_map>
-#include <sys/stat.h>
 #include <time.h>
 #include <cassert>
+
+#ifdef WIN32
+    #include <Windows.h>
+#else
+    #include <sys/stat.h>
+#endif
+
 
 #include "RenameClass.hpp"
 
@@ -39,13 +45,17 @@ std::string RenameClass::getMimeType(const std::string &path)
 std::string RenameClass::getFileDate(const std::string &filePath)
 {
     #if _WIN32
-    return "";
+        WIN32_FILE_ATTRIBUTE_DATA fileInfo;
+        LPSYSTEMTIME sysTime;
+        GetFileAttributesExA(filePath.c_str(), GetFileExInfoStandard, static_cast<void *>(& fileInfo));
+        FileTimeToSystemTime(&fileInfo.ftCreationTime, sysTime);
+        return std::to_string(sysTime->wDay) + "_" + std::to_string(sysTime->wMonth) + "_" + std::to_string(sysTime->wYear);
     #else
-    struct stat t_stat;
-    char buffer[11];
-    stat(filePath.c_str(), &t_stat);
-    struct tm *timeinfo = localtime(&t_stat.st_ctime);
-    strftime(buffer, 11, "%d_%m_%Y", timeinfo);
-    return buffer;
+        struct stat t_stat;
+        char buffer[11];
+        stat(filePath.c_str(), &t_stat);
+        struct tm *timeinfo = localtime(&t_stat.st_ctime);
+        strftime(buffer, 11, "%d_%m_%Y", timeinfo);
+        return buffer;
     #endif
 }
