@@ -1,5 +1,5 @@
 ## VAR
-NAME			=	a.out
+NAME			=	Changer_les_noms_des_fichiers_par_date
 TESTS_NAME	=	unit_tests
 BUILD_TYPE	=	Release
 
@@ -14,7 +14,7 @@ all: $(NAME)
 
 .PHONY: build
 build:
-	mkdir -p $(BUILD_DIR) && cd $(BUILD_DIR) && conan install .. --build=missing && cmake -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) -G "Unix Makefiles" ..
+	mkdir -p $(BUILD_DIR) && cd $(BUILD_DIR) && conan install --build=missing .. && cmake -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) -G "Unix Makefiles" ..
 
 .PHONY: debug_build
 debug_build: BUILD_TYPE	=	Debug
@@ -34,13 +34,3 @@ clean:
 
 .PHONY: re
 re: clean all
-
-.PHONY: tests_run
-tests_run: debug_build
-	cmake --build $(BUILD_DIR) --target $(TESTS_NAME)
-	./$(TESTS_NAME)
-
-.PHONY: coverage
-coverage:
-	lcov --capture --directory ./build/CMakeFiles/unit_tests.dir --output-file gtest_coverage.info
-	genhtml gtest_coverage.info --output-directory CODE_COVERAGE

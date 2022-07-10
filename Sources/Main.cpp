@@ -16,8 +16,6 @@
 
 int main()
 {
-    std::cout << UI::FONT_PATH << std::endl;
-
     sf::RenderWindow window(sf::VideoMode(800, 300),
         "Changer les noms des fichiers");
     UI::Button validateButton(L"Valider", sf::Color::Green, {100, 50},
