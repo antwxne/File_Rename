@@ -14,8 +14,11 @@
 #include "InputBox.hpp"
 #include "RenameClass.hpp"
 
+
 int main()
 {
+
+
     sf::RenderWindow window(sf::VideoMode(800, 300),
         "Changer les noms des fichiers");
     UI::Button validateButton(L"Valider", sf::Color::Green, {100, 50},

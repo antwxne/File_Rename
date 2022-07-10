@@ -12,14 +12,16 @@
 
 #include <memory>
 #include <string>
+#include <filesystem>
+#include <iostream>
 
 namespace UI {
 
 //const std::string FONT_PATH = std::string(REPO_SOURCE_DIR) + "/build/bin/BebasNeue-Regular.ttf";;
 #if _WIN32
-    const std::string FONT_PATH = "BebasNeue-Regular.ttf";
+    const std::string FONT_PATH = std::filesystem::current_path().string() + "\\BebasNeue-Regular.ttf";
 #else
-    const std::string FONT_PATH = std::string(REPO_SOURCE_DIR) + "/Resources/BebasNeue-Regular.ttf";
+    const std::string FONT_PATH = std::wstring(REPO_SOURCE_DIR) + "/Resources/BebasNeue-Regular.ttf";
 #endif
 
 class Button {
