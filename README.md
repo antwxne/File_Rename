@@ -18,3 +18,9 @@ make
 ```
 
 ## Usage
+
+![](.github/resources/example.PNG)
+
+1. Paste a directory path to the input box.
+
+2. Click on the green button.
