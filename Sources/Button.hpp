@@ -20,7 +20,6 @@ namespace UI {
     const std::string FONT_PATH = "BebasNeue-Regular.ttf";
 #else
     const std::string FONT_PATH = std::string(REPO_SOURCE_DIR) + "/Resources/BebasNeue-Regular.ttf";
-
 #endif
 
 class Button {

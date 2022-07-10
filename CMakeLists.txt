@@ -34,7 +34,7 @@ include_directories(Sources)
 include(Sources/Sources.cmake)
 set(MAIN
         Sources/Main.cpp)
-set(SRC ${SRC} Sources/Button.cpp Sources/Button.hpp Sources/InputBox.cpp Sources/InputBox.hpp Sources/RenameClass.cpp Sources/RenameClass.hpp)
+set(SRC ${SRC})
 
 # Build
 add_executable(${NAME} ${MAIN} ${SRC})
